@@ -1,0 +1,21 @@
+import java.io.*;
+import java.util.*;
+
+public class ReverseAlphabetical {
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+
+        System.out.print("Enter the word: ");
+        String w = s.nextLine();
+
+        char[] a = w.toCharArray();
+        Arrays.sort(a);
+
+        StringBuilder r = new StringBuilder(new String(a));
+        r.reverse();
+
+        System.out.println("Alphabetical Order: " + r.toString().replace("", " ").trim());
+
+        s.close();
+    }
+}

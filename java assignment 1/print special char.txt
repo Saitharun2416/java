@@ -1,0 +1,26 @@
+import java.io.*;
+import java.util.*;
+
+public class SpecialCharacters {
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+
+        System.out.print("Enter a line: ");
+        String l = s.nextLine();
+
+        int c = 0;
+        StringBuilder sc = new StringBuilder();
+
+        for (char x : l.toCharArray()) {
+            if (!Character.isLetterOrDigit(x) && !Character.isWhitespace(x)) {
+                sc.append(x).append(' ');
+                c++;
+            }
+        }
+
+        System.out.println("Special characters: " + sc.toString().trim());
+        System.out.println("Number of special characters: " + c);
+
+        s.close();
+    }
+}

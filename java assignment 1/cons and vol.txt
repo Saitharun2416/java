@@ -1,0 +1,27 @@
+import java.io.*;
+import java.util.*;
+
+public class ConsonantsAndVowels {
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+
+        System.out.print("Given Word: ");
+        String w = s.nextLine();
+
+        StringBuilder c = new StringBuilder();
+        StringBuilder v = new StringBuilder();
+
+        for (char x : w.toCharArray()) {
+            if ("AEIOUaeiou".indexOf(x) != -1) {
+                v.append(x).append(' ');
+            } else if (Character.isLetter(x)) {
+                c.append(x).append(' ');
+            }
+        }
+
+        System.out.println("Consonants: " + c.toString().trim());
+        System.out.println("Vowels: " + v.toString().trim());
+
+        s.close();
+    }
+}
