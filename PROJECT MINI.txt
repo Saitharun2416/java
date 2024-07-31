@@ -1,0 +1,140 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class Traffic_Signal extends JFrame implements ActionListener {
+
+    JTextField[] vehicleCountFields = new JTextField[3];
+    JTextField[] signalDisplays = new JTextField[3];
+    JButton[] updateButtons = new JButton[3];
+
+    int[] vehicleCounts = new int[3];
+    String[] signals = new String[3];
+
+    public Traffic_Signal(String title) {
+        super(title);
+        setLayout(new GridLayout(4, 1));
+
+        add(createIntersectionPanel("Intersection 1", 0));
+
+        add(createIntersectionPanel("Intersection 2", 1));
+
+    
+        add(createIntersectionPanel("Intersection 3", 2));
+
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                System.exit(0);
+            }
+        });
+    }
+
+    private JPanel createIntersectionPanel(String title, int index) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new FlowLayout());
+
+        JLabel label = new JLabel(title);
+        panel.add(label);
+
+        JLabel countLabel = new JLabel("Vehicle Count:");
+        panel.add(countLabel);
+
+        vehicleCountFields[index] = new JTextField(10);
+        vehicleCountFields[index].setToolTipText("Enter vehicle count for " + title);
+        panel.add(vehicleCountFields[index]);
+
+        updateButtons[index] = new JButton("Update Signal");
+        updateButtons[index].addActionListener(this);
+        updateButtons[index].setActionCommand("Update" + index);
+        panel.add(updateButtons[index]);
+
+        signalDisplays[index] = new JTextField(20);
+        signalDisplays[index].setEditable(false);
+        panel.add(signalDisplays[index]);
+
+        return panel;
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        for (int i = 0; i < 3; i++) {
+            if (e.getActionCommand().equals("Update" + i)) {
+                updateSignal(i);
+            }
+        }
+    }
+
+    private void updateSignal(int index) {
+        try {
+            vehicleCounts[index] = Integer.parseInt(vehicleCountFields[index].getText());
+        } catch (NumberFormatException e) {
+            signalDisplays[index].setText("Invalid vehicle count.");
+            return;
+        }
+
+        // Determine signal based on vehicle count
+        if (vehicleCounts[index] > 10) {
+            signals[index] = "Stop!";
+        } else if (vehicleCounts[index] > 0) {
+            signals[index] = "Get Ready to go!";
+        } else {
+            signals[index] = "Go!!";
+        }
+        signalDisplays[index].setText(signals[index]);
+        repaint();
+    }
+
+    public void paint(Graphics g) {
+        super.paint(g);
+        drawTrafficSignals(g, 100, 105);
+    }
+
+    private void drawTrafficSignals(Graphics g, int xOffset, int yOffset) {
+        for (int i = 0; i < 3; i++) {
+            int x = xOffset + (i * 150);
+            int y = yOffset;
+
+            g.drawRect(x, y, 110, 270);
+            g.drawOval(x + 20, y + 45, 60, 60);
+            g.drawOval(x + 20, y + 125, 60, 60);
+            g.drawOval(x + 20, y + 205, 60, 60);
+
+            switch (signals[i]) {
+                case "Stop!":
+                    g.setColor(Color.RED);
+                    g.fillOval(x + 20, y + 45, 60, 60);
+                    g.setColor(Color.WHITE);
+                    g.fillOval(x + 20, y + 125, 60, 60);
+                    g.fillOval(x + 20, y + 205, 60, 60);
+                    break;
+                case "Get Ready to go!":
+                    g.setColor(Color.WHITE);
+                    g.fillOval(x + 20, y + 45, 60, 60);
+                    g.setColor(Color.YELLOW);
+                    g.fillOval(x + 20, y + 125, 60, 60);
+                    g.setColor(Color.WHITE);
+                    g.fillOval(x + 20, y + 205, 60, 60);
+                    break;
+                case "Go!!":
+                    g.setColor(Color.WHITE);
+                    g.fillOval(x + 20, y + 45, 60, 60);
+                    g.fillOval(x + 20, y + 125, 60, 60);
+                    g.setColor(Color.GREEN);
+                    g.fillOval(x + 20, y + 205, 60, 60);
+                    break;
+                default:
+                    g.setColor(Color.WHITE);
+                    g.fillOval(x + 20, y + 45, 60, 60);
+                    g.fillOval(x + 20, y + 125, 60, 60);
+                    g.fillOval(x + 20, y + 205, 60, 60);
+                    break;
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        JFrame jf = new Traffic_Signal("Traffic Lights");
+
+        jf.setSize(600, 400);
+        jf.setVisible(true);
+    }
+}
